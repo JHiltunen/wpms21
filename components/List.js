@@ -1,25 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList} from 'react-native';
-import { baseUrl } from '../utils/variables';
+import {baseUrl} from '../utils/variables';
 import ListItem from './ListItem';
 
 const List = (props) => {
   const [mediaArray, setMediaArray] = useState([]);
-  const url = baseUrl + 'media';
 
   useEffect(() => {
     const loadMedia = async () => {
       try {
-        const response = await fetch(url);
-        const json = await response.json();
-        setMediaArray(json);
+        const response = await fetch(baseUrl + 'media');
+        const mediaWithoutThumbnail = await response.json();
+        const allFiles = mediaWithoutThumbnail.map(async (media) => {
+          const response = await fetch(baseUrl + 'media/' + media.file_id);
+          const file = await response.json();
+          return file;
+        });
+        setMediaArray(await Promise.all(allFiles));
       } catch (e) {
         console.log(e.message);
       }
     };
     loadMedia();
   }, []);
-  console.log('List row 15 ', mediaArray);
+  console.log('List: mediaArray', mediaArray);
 
   return (
     <FlatList
