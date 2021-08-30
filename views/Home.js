@@ -1,18 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Platform, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
+import {
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import List from '../components/List';
 
-const Home = (props) => {
+const Home = ({navigation}) => {
   return (
-    <SafeAreaView style={styles.container}>
-      <List />
+    <SafeAreaView style={styles.droidSafeArea}>
+      <View style={styles.container}>
+        <List navigation={navigation} />
+      </View>
       <StatusBar style="auto" />
     </SafeAreaView>
   );
 };
-
-Home.propTypes = {};
 
 const styles = StyleSheet.create({
   container: {
@@ -25,5 +31,9 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 30 : 0,
   },
 });
+
+Home.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 export default Home;

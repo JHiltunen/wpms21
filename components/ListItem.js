@@ -1,13 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { uploadsUrl } from '../utils/variables';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {uploadsUrl} from '../utils/variables';
 
-const ListItem = ({singleMedia}) => {
+const ListItem = ({singleMedia, navigation}) => {
   return (
-    <TouchableOpacity style={styles.row}>
+    <TouchableOpacity
+      style={styles.row}
+      onPress={() => {
+        navigation.navigate('Single');
+      }}
+    >
       <View style={styles.imagebox}>
-        <Image style={styles.image} source={{uri: uploadsUrl + singleMedia.thumbnails?.w160}} />
+        <Image
+          style={styles.image}
+          source={{uri: uploadsUrl + singleMedia.thumbnails?.w160}}
+        />
       </View>
       <View style={styles.textbox}>
         <Text style={styles.listTitle}>{singleMedia.title}</Text>
@@ -50,6 +58,7 @@ const styles = StyleSheet.create({
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object.isRequired,
+  navigation: PropTypes.object.isRequired,
 };
 
 export default ListItem;
