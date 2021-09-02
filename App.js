@@ -16,7 +16,7 @@ const App = () => {
           ></ImageBackground>
           <Text style={styles.kitten_slogan}>Lost and found kittens</Text>
         </View>
-        <List />
+        <List style={styles.list} />
         <StatusBar style="auto" />
       </View>
     </SafeAreaView>
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexBasis: 300,
+    marginBottom: 20,
   },
   headerImageBackground: {
     margin: 20,

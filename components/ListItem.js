@@ -22,9 +22,9 @@ const ListItem = ({singleMedia}) => {
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    margin: 20,
+    marginHorizontal: 20,
+    marginVertical: 15,
     padding: 15,
-    marginBottom: 5,
     borderRadius: 20,
     flex: 1,
     backgroundColor: '#89AAE6',
