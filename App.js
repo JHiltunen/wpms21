@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import {Settings} from 'react-native-feather';
 import List from './components/List';
 
 const App = () => {
@@ -16,6 +17,9 @@ const App = () => {
       <StatusBar animated={true} backgroundColor="#89AAE6" />
       <View style={styles.container}>
         <View style={styles.header}>
+          <View style={styles.icon}>
+            <Settings stroke="white" width={35} height={35} />
+          </View>
           <ImageBackground
             source={{uri: 'https://placekitten.com/300/200'}}
             resizeMode="cover"
@@ -34,6 +38,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#22232c',
+  },
+  icon: {
+    position: 'absolute',
+    margin: 25,
+    right: 20,
+    top: 15,
+    zIndex: 1,
   },
   image: {
     flex: 1,
