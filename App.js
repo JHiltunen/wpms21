@@ -31,25 +31,34 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
   },
+  header: {
+    flexBasis: 300,
+  },
   headerImageBackground: {
-    borderBottomRightRadius: 50,
+    margin: 20,
+    borderRadius: 50,
   },
   kitten_slogan: {
-    width: 200,
+    margin: 20,
+    width: 220,
     height: 50,
-    backgroundColor: 'rgba(42, 215, 250, 0.4)',
+    backgroundColor: 'rgba(137, 170, 230, 0.7)',
     position: 'absolute',
-    bottom: '20%',
+    bottom: 15,
     left: 0,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    fontSize: 19,
+    borderBottomLeftRadius: 25,
+    borderTopRightRadius: 25,
+    fontWeight: 'bold',
+    color: '#f4f4f4',
+    fontFamily: 'Roboto',
   },
   droidSafeArea: {
     flex: 1,
     backgroundColor: '#ccc',
     paddingTop: Platform.OS === 'android' ? 30 : 0,
-  },
-  header: {
-    flexBasis: 300,
-    position: 'relative',
   },
 });
 
