@@ -13,7 +13,7 @@ const ListItem = ({singleMedia}) => {
       </View>
       <View style={styles.textbox}>
         <Text style={styles.listTitle}>{singleMedia.title}</Text>
-        <Text>{singleMedia.description}</Text>
+        <Text style={styles.listDesc}>{singleMedia.description}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 
   image: {
     flex: 1,
-    borderRadius: 6,
+    borderRadius: 10,
   },
 
   textbox: {
@@ -45,9 +45,18 @@ const styles = StyleSheet.create({
   },
 
   listTitle: {
+    textAlign: 'center',
+    fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: 20,
     paddingBottom: 15,
+    color: '#f4f4f4',
+  },
+
+  listDesc: {
+    fontFamily: 'Roboto',
+    color: '#f4f4f4',
+    fontSize: 15,
   },
 });
 
