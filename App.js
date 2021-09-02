@@ -1,11 +1,19 @@
 import {StatusBar} from 'expo-status-bar';
 import React from 'react';
-import {ImageBackground, Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  ImageBackground,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import List from './components/List';
 
 const App = () => {
   return (
     <SafeAreaView style={styles.droidSafeArea}>
+      <StatusBar animated={true} backgroundColor="#89AAE6" />
       <View style={styles.container}>
         <View style={styles.header}>
           <ImageBackground
@@ -17,7 +25,6 @@ const App = () => {
           <Text style={styles.kitten_slogan}>Lost and found kittens</Text>
         </View>
         <List style={styles.list} />
-        <StatusBar style="auto" />
       </View>
     </SafeAreaView>
   );
