@@ -1,15 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {View, Button} from 'react-native';
+import {View, Button, Alert} from 'react-native';
 import FormTextInput from './FormTextInput';
 import useSignUpForm from '../hooks/RegisterHooks';
+import {useUser} from '../hooks/ApiHooks';
 
 const RegisterForm = ({navigation}) => {
-  const {handleInputChange} = useSignUpForm();
-
-  const doRegister = () => {
-    // TODO: add register() to useUser() hook in API hooks
+  const doRegister = async () => {
+    const {register} = useUser();
+    const serverResponse = await register(inputs);
+    if (serverResponse) {
+      Alert.alert(serverResponse.message);
+    } else {
+      Alert.alert('register failed');
+    }
   };
+
+  const {inputs, handleInputChange} = useSignUpForm(); // makes inputs and handleInput change visible from RegisterHooks.js
 
   return (
     <View>
