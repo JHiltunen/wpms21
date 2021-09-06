@@ -14,10 +14,10 @@ const Profile = (props) => {
 
   useEffect(() => {
     (async () => {
-      const file = await getFilesByTag('avatar_594');
+      const file = await getFilesByTag('avatar_' + user.user_id);
       setAvatar(uploadsUrl + file.pop().filename);
     })();
-  }, []);
+  }, [user]);
 
   const logout = async () => {
     setIsLoggedIn(false);
