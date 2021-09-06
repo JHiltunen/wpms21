@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import {Text} from 'react-native-elements';
+import {Card} from 'react-native-elements';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -30,10 +30,13 @@ const Login = ({navigation}) => {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text h4>Login</Text>
-      <LoginForm navigation={navigation} />
-      <Text h4>Register</Text>
-      <RegisterForm navigation={navigation} />
+      <Card>
+        <Card.Title h4>Login</Card.Title>
+        <LoginForm navigation={navigation} />
+        <Card.Divider />
+        <Card.Title h4>Register</Card.Title>
+        <RegisterForm navigation={navigation} />
+      </Card>
     </KeyboardAvoidingView>
   );
 };
