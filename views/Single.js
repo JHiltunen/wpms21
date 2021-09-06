@@ -1,23 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Image, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import {uploadsUrl} from '../utils/variables';
 import {format} from 'date-fns';
+import {Text, Image} from 'react-native-elements';
+import {ActivityIndicator} from 'react-native-paper';
 
 const Single = ({route}) => {
   const {params} = route;
   console.log('Single', route.params);
   return (
     <SafeAreaView style={styles.container}>
-      <Text>{params.title}</Text>
+      <Text>User who created post: {params.user_id}</Text>
+      <Text>
+        Date added: {format(new Date(params.time_added), 'dd.MMMM.yyyy')}
+      </Text>
       <Image
-        style={{width: 200, height: 300}}
+        style={{width: 350, height: 350}}
         source={{uri: uploadsUrl + params.filename}}
+        PlaceholderContent={<ActivityIndicator />}
       />
+      <Text h3>{params.title}</Text>
       <Text>{params.description}</Text>
-      <Text>{params.user_id}</Text>
-      <Text>{format(new Date(params.time_added), 'dd.MMMM.yyyy')}</Text>
-      <Text>{params.media_type}</Text>
     </SafeAreaView>
   );
 };
@@ -28,7 +32,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 40,
   },
 });
 
