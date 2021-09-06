@@ -1,13 +1,24 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {Button, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {Button, Image, SafeAreaView, StyleSheet, Text} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useTag} from '../hooks/ApiHooks';
+import {uploadsUrl} from '../utils/variables';
 
 const Profile = (props) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
-  console.log('Profile isLoggedIn', isLoggedIn);
-  console.log('user on profile page', user);
+  const [avatar, setAvatar] = useState('https://placekitten.com/400/400');
+
+  const {getFilesByTag} = useTag();
+
+  useEffect(() => {
+    (async () => {
+      const file = await getFilesByTag('avatar_594');
+      setAvatar(uploadsUrl + file.pop().filename);
+    })();
+  }, []);
+
   const logout = async () => {
     setIsLoggedIn(false);
     AsyncStorage.clear();
@@ -19,6 +30,7 @@ const Profile = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text>Profile</Text>
+      <Image source={{uri: avatar}} style={{width: 300, height: 300}} />
       <Text>Username: {user.username}</Text>
       <Text>Full name: {user.full_name}</Text>
       <Text>Email: {user.email}</Text>
