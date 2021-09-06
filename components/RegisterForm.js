@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Alert, KeyboardAvoidingView} from 'react-native';
 import {Button, Input} from 'react-native-elements';
-import FormTextInput from './FormTextInput';
 import useSignUpForm from '../hooks/RegisterHooks';
 import {useUser} from '../hooks/ApiHooks';
 
