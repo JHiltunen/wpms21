@@ -41,7 +41,7 @@ const useLogin = () => {
     const requestOptions = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: userCredentials,
+      body: JSON.stringify(userCredentials),
     };
     try {
       const loginResponse = await doFetch(baseUrl + 'login', requestOptions);
