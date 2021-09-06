@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import {useLogin} from '../hooks/ApiHooks';
 import {KeyboardAvoidingView} from 'react-native';
-import {Button} from 'react-native-elements';
-import FormTextInput from './FormTextInput';
+import {Button, Input} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useLoginForm from '../hooks/LoginHooks';
 
@@ -30,12 +29,12 @@ const LoginForm = ({navigation}) => {
 
   return (
     <KeyboardAvoidingView>
-      <FormTextInput
+      <Input
         autoCapitalize="none"
         placeholder="username"
         onChangeText={(txt) => handleInputChange('username', txt)}
       />
-      <FormTextInput
+      <Input
         autoCapitalize="none"
         placeholder="password"
         onChangeText={(txt) => handleInputChange('password', txt)}
