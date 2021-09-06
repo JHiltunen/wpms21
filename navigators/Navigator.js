@@ -14,7 +14,6 @@ const Stack = createNativeStackNavigator();
 
 const TabScreen = () => {
   return (
-    // TODO: move content of <NavigationContainer> here
     <Tab.Navigator>
       <Tab.Screen
         name="Home"
