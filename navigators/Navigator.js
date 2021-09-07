@@ -7,34 +7,32 @@ import Profile from '../views/Profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Icon} from 'react-native-elements';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const TabScreen = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarLabel: 'Profile',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="account" color={color} size={26} />
-          ),
-        }}
-      />
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({color, size}) => {
+          let iconName = '';
+          console.log('route name: ', route.name);
+          switch (route.name) {
+            case 'Home':
+              iconName = 'home';
+              break;
+            case 'Profile':
+              iconName = 'account-box';
+              break;
+          }
+          return <Icon name={iconName} size={size} color={color} />;
+        },
+      })}
+    >
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };
@@ -45,7 +43,11 @@ const StackScreen = () => {
     <Stack.Navigator>
       {isLoggedIn ? (
         <>
-          <Stack.Screen name="Front" component={TabScreen} />
+          <Stack.Screen
+            name="Front"
+            component={TabScreen}
+            options={{headerShown: false}}
+          />
           <Stack.Screen name="Single" component={Single} />
         </>
       ) : (
