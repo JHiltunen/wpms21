@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, KeyboardAvoidingView} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
@@ -6,11 +6,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import {Card} from 'react-native-elements';
+import {Button, Card} from 'react-native-elements';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {checkToken} = useUser();
+  const [registerFormToggle, setRegisterFormToggle] = useState(false);
 
   const getToken = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
@@ -30,13 +31,29 @@ const Login = ({navigation}) => {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Card>
-        <Card.Title h4>Login</Card.Title>
-        <LoginForm navigation={navigation} />
-        <Card.Divider />
-        <Card.Title h4>Register</Card.Title>
-        <RegisterForm navigation={navigation} />
-      </Card>
+      {registerFormToggle ? (
+        <Card>
+          <Card.Divider />
+          <Card.Title h4>Register</Card.Title>
+          <RegisterForm navigation={navigation} />
+        </Card>
+      ) : (
+        <Card>
+          <Card.Title h4>Login</Card.Title>
+          <LoginForm navigation={navigation} />
+        </Card>
+      )}
+      {/* TODO: add link/button & event handler to change state: setRegromtoggle(!regformtoggle);*/}
+      <Button
+        title={
+          registerFormToggle
+            ? 'Already registered? Login here.'
+            : 'No account? Register here.'
+        }
+        onPress={() => {
+          setRegisterFormToggle(!registerFormToggle);
+        }}
+      />
     </KeyboardAvoidingView>
   );
 };
