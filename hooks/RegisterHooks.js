@@ -1,5 +1,41 @@
 import {useState} from 'react';
 import {useUser} from './ApiHooks';
+import {validator} from '../utils/validator';
+
+const constraints = {
+  username: {
+    presence: true,
+    length: {
+      minimum: 3,
+      message: 'must be at least 3 chars',
+    },
+  },
+  password: {
+    presence: true,
+    length: {
+      minimum: 6,
+      message: 'must be at least 6 characters',
+    },
+  },
+  confirmPassword: {
+    equality: {
+      attribute: 'password',
+      message: '^ passwords do not match',
+    },
+  },
+  email: {
+    presence: true,
+    email: {
+      message: 'must be a valid email address',
+    },
+  },
+  full_name: {
+    length: {
+      minimum: 3,
+      message: 'must be at least 3 chars',
+    },
+  },
+};
 
 const useSignUpForm = (callback) => {
   const {checkUsernameAvailable} = useUser();
@@ -19,6 +55,27 @@ const useSignUpForm = (callback) => {
       return {
         ...inputs,
         [name]: text,
+      };
+    });
+  };
+
+  const handleOnEndEditing = (name, text) => {
+    // 1. validate input value
+    let error;
+    if (name === 'confirmPassword') {
+      error = validator(
+        name,
+        {password: inputs.password, confirmPassword: text},
+        constraints
+      );
+    } else {
+      error = validator(name, text, constraints);
+    }
+    // 2. update errors state
+    setErrors((errors) => {
+      return {
+        ...errors,
+        [name]: error,
       };
     });
   };
@@ -48,6 +105,7 @@ const useSignUpForm = (callback) => {
 
   return {
     handleInputChange,
+    handleOnEndEditing,
     inputs,
     errors,
     checkUsername,
