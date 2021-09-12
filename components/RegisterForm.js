@@ -16,7 +16,7 @@ const RegisterForm = ({navigation}) => {
     }
   };
 
-  const {inputs, handleInputChange} = useSignUpForm(); // makes inputs and handleInput change visible from RegisterHooks.js
+  const {inputs, handleInputChange, checkUsername} = useSignUpForm(); // makes inputs and handleInput change visible from RegisterHooks.js
 
   return (
     <KeyboardAvoidingView>
@@ -24,6 +24,11 @@ const RegisterForm = ({navigation}) => {
         autoCapitalize="none"
         placeholder="username"
         onChangeText={(txt) => handleInputChange('username', txt)}
+        onEndEditing={(event) => {
+          console.log('onEndEditing value', event.nativeEvent.text);
+          checkUsername(event.nativeEvent.text);
+        }}
+        errorMessage={'??'}
       />
       <Input
         autoCapitalize="none"
