@@ -6,8 +6,10 @@ import useSignUpForm from '../hooks/RegisterHooks';
 import {useUser} from '../hooks/ApiHooks';
 
 const RegisterForm = ({navigation}) => {
+  const {inputs, errors, handleInputChange, checkUsername} = useSignUpForm();
+  const {register} = useUser();
+
   const doRegister = async () => {
-    const {register} = useUser();
     const serverResponse = await register(inputs);
     if (serverResponse) {
       Alert.alert(serverResponse.message);
@@ -15,8 +17,6 @@ const RegisterForm = ({navigation}) => {
       Alert.alert('register failed');
     }
   };
-
-  const {inputs, handleInputChange, checkUsername} = useSignUpForm(); // makes inputs and handleInput change visible from RegisterHooks.js
 
   return (
     <KeyboardAvoidingView>
@@ -28,7 +28,7 @@ const RegisterForm = ({navigation}) => {
           console.log('onEndEditing value', event.nativeEvent.text);
           checkUsername(event.nativeEvent.text);
         }}
-        errorMessage={'??'}
+        errorMessage={errors.username}
       />
       <Input
         autoCapitalize="none"
