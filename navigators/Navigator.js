@@ -19,7 +19,6 @@ const TabScreen = () => {
       screenOptions={({route}) => ({
         tabBarIcon: ({color, size}) => {
           let iconName = '';
-          console.log('route name: ', route.name);
           switch (route.name) {
             case 'Home':
               iconName = 'home';

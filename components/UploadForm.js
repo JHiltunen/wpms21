@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {KeyboardAvoidingView} from 'react-native';
 import {Button, Input} from 'react-native-elements';
-import useUploadForm from '../hooks/UploadHooks';
 
 const UploadForm = ({title, handleSubmit, handleInputChange}) => {
   return (

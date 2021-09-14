@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {doFetch} from '../utils/http';
 import {baseUrl} from '../utils/variables';
@@ -33,7 +34,25 @@ const useMedia = () => {
     }
   };
 
-  return {mediaArray, loadSingleMedia, loadMedia};
+  const uploadMedia = async (formData, token) => {
+    try {
+      const options = {
+        method: 'POST',
+        headers: {
+          'x-access-token': token,
+        },
+        body: formData,
+      };
+      console.log('options', options);
+      console.log('uploadMedia token: ', token);
+      const result = await doFetch(baseUrl + 'media', options);
+      console.log('axios', result);
+    } catch (e) {
+      console.log('axios error', e.message);
+    }
+  };
+
+  return {mediaArray, loadSingleMedia, loadMedia, uploadMedia};
 };
 
 const useLogin = () => {
