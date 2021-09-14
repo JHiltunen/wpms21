@@ -10,17 +10,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Upload = (props) => {
   const [image, setImage] = useState(require('../assets/icon.png'));
-  const [type, setType] = useState('');
+  // const [type, setType] = useState('');
   const {inputs, handleInputChange} = useUploadForm();
   const {uploadMedia} = useMedia();
 
   const doUpload = async () => {
     const filename = image.uri.split('/').pop();
+    // Infer the type of the image
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
     const formData = new FormData();
     formData.append('file', {uri: image.uri, name: filename, type});
     formData.append('title', inputs.title);
     formData.append('description', inputs.description);
-    console.log('doUpload', formData);
+    // console.log('doUpload', formData);
     const userToken = await AsyncStorage.getItem('userToken');
     await uploadMedia(formData, userToken);
   };
@@ -49,7 +52,7 @@ const Upload = (props) => {
 
     if (!result.cancelled) {
       setImage({uri: result.uri});
-      setType(result.type);
+      // setType(result.type);
     }
   };
 

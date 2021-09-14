@@ -39,14 +39,15 @@ const useMedia = () => {
       const options = {
         method: 'POST',
         headers: {
+          'Content-Type': 'multipart/form-data',
           'x-access-token': token,
         },
-        body: formData,
+        data: formData,
       };
       console.log('options', options);
       console.log('uploadMedia token: ', token);
-      const result = await doFetch(baseUrl + 'media', options);
-      console.log('axios', result);
+      const result = await axios(baseUrl + 'media', options);
+      console.log('axios', result.data);
     } catch (e) {
       console.log('axios error', e.message);
     }
