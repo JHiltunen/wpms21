@@ -17,8 +17,8 @@ const Upload = (props) => {
   const doUpload = async () => {
     const filename = image.uri.split('/').pop();
     // Infer the type of the image
-    let match = /\.(\w+)$/.exec(filename);
-    let type = match ? `image/${match[1]}` : `image`;
+    const match = /\.(\w+)$/.exec(filename);
+    const type = match ? `image/${match[1]}` : `image`;
     const formData = new FormData();
     formData.append('file', {uri: image.uri, name: filename, type});
     formData.append('title', inputs.title);
