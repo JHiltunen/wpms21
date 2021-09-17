@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {View, Platform} from 'react-native';
+import {View, Platform, ActivityIndicator} from 'react-native';
 import UploadForm from '../components/UploadForm';
 import {Button, Image} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
@@ -12,7 +12,7 @@ const Upload = (props) => {
   const [image, setImage] = useState(require('../assets/icon.png'));
   // const [type, setType] = useState('');
   const {inputs, handleInputChange} = useUploadForm();
-  const {uploadMedia} = useMedia();
+  const {uploadMedia, loading} = useMedia();
 
   const doUpload = async () => {
     const filename = image.uri.split('/').pop();
@@ -64,7 +64,9 @@ const Upload = (props) => {
         title="Upload"
         handleSubmit={doUpload}
         handleInputChange={handleInputChange}
+        loading={loading}
       />
+      {loading && <ActivityIndicator />}
     </View>
   );
 };

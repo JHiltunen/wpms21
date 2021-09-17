@@ -5,6 +5,7 @@ import {baseUrl} from '../utils/variables';
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -36,6 +37,7 @@ const useMedia = () => {
 
   const uploadMedia = async (formData, token) => {
     try {
+      setLoading(true);
       const options = {
         method: 'POST',
         headers: {
@@ -50,10 +52,12 @@ const useMedia = () => {
       console.log('axios', result.data);
     } catch (e) {
       console.log('axios error', e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  return {mediaArray, loadSingleMedia, loadMedia, uploadMedia};
+  return {mediaArray, loading, loadSingleMedia, loadMedia, uploadMedia};
 };
 
 const useLogin = () => {
