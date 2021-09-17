@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(require('../assets/icon.png'));
   // const [type, setType] = useState('');
-  const {inputs, handleInputChange} = useUploadForm();
+  const {inputs, handleInputChange, reset} = useUploadForm();
   const {uploadMedia, loading} = useMedia();
 
   const doUpload = async () => {
@@ -29,6 +29,7 @@ const Upload = ({navigation}) => {
       const result = await uploadMedia(formData, userToken);
       console.log('doUpload', result);
       if (result) {
+        doReset();
         navigation.navigate('Home');
       }
     } catch (e) {
@@ -62,6 +63,11 @@ const Upload = ({navigation}) => {
       setImage({uri: result.uri});
       // setType(result.type);
     }
+  };
+
+  const doReset = () => {
+    setImage(null);
+    reset();
   };
 
   return (
