@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import {useMedia} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Upload = (props) => {
+const Upload = ({navigation}) => {
   const [image, setImage] = useState(require('../assets/icon.png'));
   // const [type, setType] = useState('');
   const {inputs, handleInputChange} = useUploadForm();
@@ -24,8 +24,16 @@ const Upload = (props) => {
     formData.append('title', inputs.title);
     formData.append('description', inputs.description);
     // console.log('doUpload', formData);
-    const userToken = await AsyncStorage.getItem('userToken');
-    await uploadMedia(formData, userToken);
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      const result = await uploadMedia(formData, userToken);
+      console.log('doUpload', result);
+      if (result) {
+        navigation.navigate('Home');
+      }
+    } catch (e) {
+      console.log('doUpload error', e.message);
+    }
   };
 
   useEffect(() => {
@@ -71,6 +79,8 @@ const Upload = (props) => {
   );
 };
 
-Upload.propTypes = {};
+Upload.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 export default Upload;
