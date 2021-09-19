@@ -2,10 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {KeyboardAvoidingView} from 'react-native';
 import {Button, Input} from 'react-native-elements';
-import useUploadForm from '../hooks/UploadHooks';
 
-const UploadForm = ({title, handleSubmit, loading}) => {
-  const {uploadErrors, handleInputChange} = useUploadForm();
+const UploadForm = ({
+  title,
+  handleSubmit,
+  handleInputChange,
+  uploadErrors,
+  loading,
+}) => {
   return (
     <KeyboardAvoidingView>
       <Input
@@ -39,6 +43,7 @@ UploadForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   handleInputChange: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  uploadErrors: PropTypes.object.isRequired,
 };
 
 export default UploadForm;

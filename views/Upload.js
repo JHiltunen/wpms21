@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(require('../assets/icon.png'));
   // const [type, setType] = useState('');
-  const {inputs, handleInputChange, reset} = useUploadForm();
+  const {inputs, handleInputChange, reset, uploadErrors} = useUploadForm();
   const {uploadMedia, loading} = useMedia();
 
   const doUpload = async () => {
@@ -79,6 +79,7 @@ const Upload = ({navigation}) => {
         handleSubmit={doUpload}
         handleInputChange={handleInputChange}
         loading={loading}
+        uploadErrors={uploadErrors}
       />
       {loading && <ActivityIndicator />}
     </View>
