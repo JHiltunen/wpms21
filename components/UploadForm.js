@@ -9,6 +9,7 @@ const UploadForm = ({
   handleInputChange,
   uploadErrors,
   loading,
+  image,
   inputs,
 }) => {
   return (
@@ -34,7 +35,9 @@ const UploadForm = ({
         onPress={handleSubmit}
         loading={loading}
         disabled={
-          uploadErrors.title !== null || uploadErrors.description !== null
+          uploadErrors.title !== null ||
+          uploadErrors.description !== null ||
+          image === null
         }
       />
     </KeyboardAvoidingView>
@@ -47,6 +50,21 @@ UploadForm.propTypes = {
   handleInputChange: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   uploadErrors: PropTypes.object.isRequired,
+  image: PropTypes.oneOfType([
+    PropTypes.shape({
+      uri: PropTypes.string,
+      headers: PropTypes.objectOf(PropTypes.string),
+    }),
+    PropTypes.number,
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        uri: PropTypes.string,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        headers: PropTypes.objectOf(PropTypes.string),
+      })
+    ),
+  ]),
   inputs: PropTypes.object.isRequired,
 };
 

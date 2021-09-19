@@ -99,6 +99,7 @@ const Upload = ({navigation}) => {
           handleInputChange={handleInputChange}
           loading={loading}
           uploadErrors={uploadErrors}
+          image={image}
           inputs={inputs}
         />
         <Card.Divider />
