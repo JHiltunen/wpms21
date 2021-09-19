@@ -4,8 +4,8 @@ import {KeyboardAvoidingView} from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 
-const UploadForm = ({title, handleSubmit, loading}) => {
-  const {uploadErrors, handleInputChange} = useUploadForm();
+const UploadForm = ({title, handleSubmit, handleInputChange, loading}) => {
+  const {uploadErrors} = useUploadForm();
   return (
     <KeyboardAvoidingView>
       <Input
