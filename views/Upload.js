@@ -1,18 +1,20 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
-import {View, Platform, ActivityIndicator} from 'react-native';
+import {View, Platform, ActivityIndicator, Alert} from 'react-native';
 import UploadForm from '../components/UploadForm';
 import {Button, Image} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
 import {useMedia} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MainContext} from '../contexts/MainContext';
 
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(require('../assets/icon.png'));
   // const [type, setType] = useState('');
   const {inputs, handleInputChange, reset, uploadErrors} = useUploadForm();
   const {uploadMedia, loading} = useMedia();
+  const {update, setUpdate} = useContext(MainContext);
 
   const doUpload = async () => {
     const filename = image.uri.split('/').pop();
@@ -28,9 +30,22 @@ const Upload = ({navigation}) => {
       const userToken = await AsyncStorage.getItem('userToken');
       const result = await uploadMedia(formData, userToken);
       console.log('doUpload', result);
-      if (result) {
-        doReset();
-        navigation.navigate('Home');
+      if (result.message) {
+        Alert.alert(
+          'Upload',
+          result.message,
+          [
+            {
+              text: 'Ok',
+              onPress: () => {
+                setUpdate(update + 1);
+                doReset();
+                navigation.navigate('Home');
+              },
+            },
+          ],
+          {cancelable: false}
+        );
       }
     } catch (e) {
       console.log('doUpload error', e.message);

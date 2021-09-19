@@ -1,17 +1,18 @@
 import axios from 'axios';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
+import {MainContext} from '../contexts/MainContext';
 import {doFetch} from '../utils/http';
 import {baseUrl} from '../utils/variables';
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [update, setUpdate] = useState(0);
+  const {update} = useContext(MainContext);
 
   useEffect(() => {
     (async () => {
       setMediaArray(await loadMedia());
-      console.log('useMedia useEffect', mediaArray[0]);
+      // console.log('useMedia useEffect', mediaArray);
     })();
   }, [update]);
 
@@ -49,14 +50,9 @@ const useMedia = () => {
         data: formData,
       };
       const result = await axios(baseUrl + 'media', options);
-      console.log('axios', result.data);
-      if (result.data) {
-        setUpdate(update + 1);
-        console.log('update', update);
-        return result.data;
-      }
+      return result.data;
     } catch (e) {
-      // console.log('axios error', e.message);
+      console.log('uploadMedia error', e.message);
       throw new Error(e.message);
     } finally {
       setLoading(false);

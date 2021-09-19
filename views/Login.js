@@ -25,7 +25,7 @@ const Login = ({navigation}) => {
           setIsLoggedIn(true);
         }
       } catch (e) {
-        console.log('error', e.message);
+        console.log('getToken', e.message);
       }
     }
   };
