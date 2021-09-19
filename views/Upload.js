@@ -5,14 +5,16 @@ import UploadForm from '../components/UploadForm';
 import {Button, Card, Image} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
+import { appID } from '../utils/variables';
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(require('../assets/icon.png'));
   // const [type, setType] = useState('');
   const {inputs, handleInputChange, reset, uploadErrors} = useUploadForm();
   const {uploadMedia, loading} = useMedia();
+  const {addTag} = useTag();
   const {update, setUpdate} = useContext(MainContext);
 
   const doUpload = async () => {
@@ -29,7 +31,9 @@ const Upload = ({navigation}) => {
       const userToken = await AsyncStorage.getItem('userToken');
       const result = await uploadMedia(formData, userToken);
       console.log('doUpload', result);
-      if (result.message) {
+      const tagResult = await addTag(result.file_id, appID, userToken);
+      console.log('doUpload addTag', tagResult);
+      if (tagResult.message) {
         Alert.alert(
           'Upload',
           result.message,
