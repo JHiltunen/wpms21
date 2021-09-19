@@ -1,14 +1,13 @@
 import React, {useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
-import {View, Platform, ActivityIndicator, Alert} from 'react-native';
+import {Platform, ActivityIndicator, Alert, ScrollView} from 'react-native';
 import UploadForm from '../components/UploadForm';
-import {Button, Image} from 'react-native-elements';
+import {Button, Card, Image} from 'react-native-elements';
 import useUploadForm from '../hooks/UploadHooks';
 import * as ImagePicker from 'expo-image-picker';
 import {useMedia} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
-
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(require('../assets/icon.png'));
   // const [type, setType] = useState('');
@@ -86,19 +85,23 @@ const Upload = ({navigation}) => {
   };
 
   return (
-    <View>
-      <Image source={image} style={{width: '100%', height: 200}} />
-      <Button title="Select media" onPress={pickImage} />
-      <UploadForm
-        title="Upload"
-        handleSubmit={doUpload}
-        handleInputChange={handleInputChange}
-        loading={loading}
-        uploadErrors={uploadErrors}
-        inputs={inputs}
-      />
-      {loading && <ActivityIndicator />}
-    </View>
+    <ScrollView>
+      <Card>
+        <Image source={image} style={{width: '100%', height: 200}} />
+        <Button title="Select media" onPress={pickImage} />
+        <UploadForm
+          title="Upload"
+          handleSubmit={doUpload}
+          handleInputChange={handleInputChange}
+          loading={loading}
+          uploadErrors={uploadErrors}
+          inputs={inputs}
+        />
+        <Card.Divider />
+        <Button raised title={'Reset'} onPress={doReset} />
+        {loading && <ActivityIndicator />}
+      </Card>
+    </ScrollView>
   );
 };
 
