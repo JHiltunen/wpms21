@@ -95,6 +95,7 @@ const Upload = ({navigation}) => {
         handleInputChange={handleInputChange}
         loading={loading}
         uploadErrors={uploadErrors}
+        inputs={inputs}
       />
       {loading && <ActivityIndicator />}
     </View>

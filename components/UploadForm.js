@@ -9,6 +9,7 @@ const UploadForm = ({
   handleInputChange,
   uploadErrors,
   loading,
+  inputs,
 }) => {
   return (
     <KeyboardAvoidingView>
@@ -17,12 +18,14 @@ const UploadForm = ({
         placeholder="title"
         onChangeText={(txt) => handleInputChange('title', txt)}
         errorMessage={uploadErrors.title}
+        value={inputs.title}
       />
       <Input
         autoCapitalize="none"
         placeholder="description"
         onChangeText={(txt) => handleInputChange('description', txt)}
         errorMessage={uploadErrors.description}
+        value={inputs.description}
       />
 
       <Button
@@ -44,6 +47,7 @@ UploadForm.propTypes = {
   handleInputChange: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   uploadErrors: PropTypes.object.isRequired,
+  inputs: PropTypes.object.isRequired,
 };
 
 export default UploadForm;
