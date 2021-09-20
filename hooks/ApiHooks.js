@@ -4,10 +4,10 @@ import {MainContext} from '../contexts/MainContext';
 import {doFetch} from '../utils/http';
 import {appID, baseUrl} from '../utils/variables';
 
-const useMedia = () => {
+const useMedia = (ownFiles = false) => {
   const [mediaArray, setMediaArray] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {update} = useContext(MainContext);
+  const {update, user} = useContext(MainContext);
 
   useEffect(() => {
     (async () => {
@@ -22,7 +22,18 @@ const useMedia = () => {
       const allFiles = mediaWithoutThumbnail.map(async (media) => {
         return await loadSingleMedia(media.file_id);
       });
-      return Promise.all(allFiles);
+
+      let media = await Promise.all(allFiles);
+
+      if (ownFiles) {
+        media = media.filter((item) => {
+          if (item.user_id === user.user_id) {
+            return item;
+          }
+        });
+      }
+
+      return media;
     } catch (e) {
       console.log('loadMedia', e.message);
     }
@@ -135,7 +146,7 @@ const useTag = () => {
     }
   };
 
-  const addTag = async(file_id, tag, token) => {
+  const addTag = async (file_id, tag, token) => {
     const options = {
       method: 'POST',
       headers: {

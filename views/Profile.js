@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTag} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 
-const Profile = (props) => {
+const Profile = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
   const [avatar, setAvatar] = useState('https://placekitten.com/400/400');
 
@@ -24,7 +24,7 @@ const Profile = (props) => {
     AsyncStorage.clear();
     if (!isLoggedIn) {
       // this is to make sure isLoggedIn has changed, will be removed later
-      props.navigation.navigate('Login');
+      navigation.navigate('Login');
     }
   };
   return (
@@ -35,6 +35,12 @@ const Profile = (props) => {
       <Text>Full name: {user.full_name}</Text>
       <Text>Email: {user.email}</Text>
       <Button title={'Logout'} onPress={logout} />
+      <Button
+        title={'My Files'}
+        onPress={() => {
+          navigation.navigate('My Files');
+        }}
+      />
     </SafeAreaView>
   );
 };
