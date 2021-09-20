@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet, Text, View} from 'react-native';
 import {uploadsUrl} from '../utils/variables';
 import {ActivityIndicator} from 'react-native';
 import {Button, Image} from 'react-native-elements';
+import {useMedia} from '../hooks/ApiHooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MainContext} from '../contexts/MainContext';
 
-const ListItem = ({singleMedia, navigation}) => {
+const ListItem = ({singleMedia, navigation, showButtons}) => {
+  const {update, setUpdate} = useContext(MainContext);
+  const {deleteMedia} = useMedia();
   return (
     <View style={styles.row}>
       <View style={styles.imagebox}>
@@ -25,6 +30,30 @@ const ListItem = ({singleMedia, navigation}) => {
           }}
           title="View"
         />
+        {showButtons && (
+          <>
+            <Button raised title="Modify" />
+            <Button
+              raised
+              title="Delete"
+              onPress={async () => {
+                try {
+                  const token = await AsyncStorage.getItem('userToken');
+                  const response = await deleteMedia(
+                    singleMedia.file_id,
+                    token
+                  );
+                  console.log('Delete', response);
+                  if (response.message) {
+                    setUpdate(update + 1);
+                  }
+                } catch (e) {
+                  console.log('ListItem, delete: ', e.message);
+                }
+              }}
+            />
+          </>
+        )}
       </View>
     </View>
   );
@@ -64,6 +93,7 @@ const styles = StyleSheet.create({
 ListItem.propTypes = {
   singleMedia: PropTypes.object.isRequired,
   navigation: PropTypes.object.isRequired,
+  showButtons: PropTypes.bool.isRequired,
 };
 
 export default ListItem;

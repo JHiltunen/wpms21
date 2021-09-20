@@ -66,7 +66,33 @@ const useMedia = (ownFiles) => {
     }
   };
 
-  return {mediaArray, loading, loadSingleMedia, loadMedia, uploadMedia};
+  const deleteMedia = async (id, token) => {
+    try {
+      setLoading(true);
+      const options = {
+        method: 'DELETE',
+        headers: {
+          'x-access-token': token,
+        },
+      };
+      const result = await doFetch(baseUrl + 'media/' + id, options);
+      return result;
+    } catch (e) {
+      console.log('deleteMedia error', e.message);
+      throw new Error(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    mediaArray,
+    loading,
+    loadSingleMedia,
+    loadMedia,
+    uploadMedia,
+    deleteMedia,
+  };
 };
 
 const useLogin = () => {
