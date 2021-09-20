@@ -4,7 +4,7 @@ import {MainContext} from '../contexts/MainContext';
 import {doFetch} from '../utils/http';
 import {appID, baseUrl} from '../utils/variables';
 
-const useMedia = (ownFiles = false) => {
+const useMedia = (ownFiles) => {
   const [mediaArray, setMediaArray] = useState([]);
   const [loading, setLoading] = useState(false);
   const {update, user} = useContext(MainContext);
@@ -18,22 +18,18 @@ const useMedia = (ownFiles = false) => {
 
   const loadMedia = async () => {
     try {
-      const mediaWithoutThumbnail = await useTag().getFilesByTag(appID);
+      let mediaWithoutThumbnail = await useTag().getFilesByTag(appID);
+
+      if (ownFiles) {
+        mediaWithoutThumbnail = mediaWithoutThumbnail.filter(
+          (item) => item.user_id === user.user_id
+        );
+      }
+
       const allFiles = mediaWithoutThumbnail.map(async (media) => {
         return await loadSingleMedia(media.file_id);
       });
-
-      let media = await Promise.all(allFiles);
-
-      if (ownFiles) {
-        media = media.filter((item) => {
-          if (item.user_id === user.user_id) {
-            return item;
-          }
-        });
-      }
-
-      return media;
+      return Promise.all(allFiles);
     } catch (e) {
       console.log('loadMedia', e.message);
     }
