@@ -32,7 +32,13 @@ const ListItem = ({singleMedia, navigation, showButtons}) => {
         />
         {showButtons && (
           <>
-            <Button raised title="Modify" />
+            <Button
+              raised
+              title="Modify"
+              onPress={() => {
+                navigation.navigate('Modify', {singleMedia, navigation});
+              }}
+            />
             <Button
               raised
               title="Delete"
