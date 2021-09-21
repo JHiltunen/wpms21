@@ -1,37 +1,103 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {uploadsUrl} from '../utils/variables';
 import {format} from 'date-fns';
-import {Text, Image} from 'react-native-elements';
+import {Text, Button, Image, Card, ListItem} from 'react-native-elements';
 import {ActivityIndicator} from 'react-native-paper';
+import {Audio, Video} from 'expo-av';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useUser} from '../hooks/ApiHooks';
 
 const Single = ({route}) => {
   const {params} = route;
-  console.log('Single', route.params);
+  const {getUserInfo} = useUser();
+  const [ownerInfo, setOwnerInfo] = useState({username: ''});
+  const [likes, setLikes] = useState([]);
+  const [iAmLikingIt, setIAmLikingIt] = useState(false);
+  const videoRef = useRef(null);
+
+  const getOwnerInfo = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    setOwnerInfo(await getUserInfo(params.user_id, token));
+  };
+  const getLikes = async () => {
+    // TODO: use api hooks to get favourites
+    // setLikes()
+    // set the value of iAmLikingIt
+  };
+
+  useEffect(() => {
+    getOwnerInfo();
+    getLikes();
+  }, []);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>User who created post: {params.user_id}</Text>
-      <Text>
-        Date added: {format(new Date(params.time_added), 'dd.MMMM.yyyy')}
-      </Text>
-      <Image
-        style={{width: 350, height: 350}}
-        source={{uri: uploadsUrl + params.filename}}
-        PlaceholderContent={<ActivityIndicator />}
-      />
-      <Text h3>{params.title}</Text>
-      <Text>{params.description}</Text>
-    </SafeAreaView>
+    <Card>
+      <Card.Title h4>{params.title}</Card.Title>
+      <Card.Title>{params.time_added}</Card.Title>
+      <Card.Divider />
+      {params.media_type === 'image' && (
+        <Card.Image
+          source={{uri: uploadsUrl + params.filename}}
+          style={styles.image}
+          PlaceholderContent={<ActivityIndicator />}
+        />
+      )}
+      {params.media_type === 'video' && (
+        <Video
+          ref={videoRef}
+          style={styles.image}
+          source={{uri: uploadsUrl + params.filename}}
+          useNativeControls
+          resizeMode="contain"
+          usePoster
+          posterSource={{uri: uploadsUrl + params.screenshot}}
+        ></Video>
+      )}
+      {params.media_type === 'audio' && (
+        <>
+          <Text>Audio not supported YET.</Text>
+          <Audio></Audio>
+        </>
+      )}
+      <Card.Divider />
+      <Text style={styles.description}>{params.description}</Text>
+      <ListItem>
+        <Text>{ownerInfo.username}</Text>
+      </ListItem>
+      <ListItem>
+        {/* TODO: show like or dislike button depending on the current like status,
+        calculate like count for a file */}
+        {iAmLikingIt ? (
+          <Button
+            title="Like"
+            onPress={() => {
+              // use api hooks to POST a favourite
+            }}
+          />
+        ) : (
+          <Button
+            title="Unlike"
+            onPress={() => {
+              // use api hooks to DELETE a favourite
+            }}
+          />
+        )}
+        <Text>Total likes: {likes.length}</Text>
+      </ListItem>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  image: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
+  },
+  description: {
+    marginBottom: 10,
   },
 });
 

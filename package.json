@@ -34,7 +34,8 @@
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "^0.17.1",
     "validate-js": "^2.0.1",
-    "validate.js": "^0.13.1"
+    "validate.js": "^0.13.1",
+    "expo-av": "~9.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
