@@ -1,4 +1,4 @@
-import {format} from 'date-fns';
+import {format, formatDistance} from 'date-fns';
 import {fi} from 'date-fns/locale';
 
 // by providing a default string of 'PP' or any of its variants for `formatStr`
@@ -9,4 +9,8 @@ const formatDate = (date, formatStr = 'PP', locale = fi) => {
   });
 };
 
-export {formatDate};
+const timeSince = (date, locale = fi) => {
+  return formatDistance(new Date(date), new Date(), {addSuffix: true, locale});
+};
+
+export {formatDate, timeSince};
