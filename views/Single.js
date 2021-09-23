@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, ActivityIndicator, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
@@ -11,7 +11,7 @@ import {
   Avatar,
 } from 'react-native-elements';
 import {Video, Audio} from 'expo-av';
-import {useUser} from '../hooks/ApiHooks';
+import {useTag, useUser} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {formatDate} from '../utils/dateFunctions';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -24,6 +24,8 @@ const Single = ({route}) => {
   const [iAmLikingIt, setIAmLikingIt] = useState(false);
   const [videoRef, setVideoRef] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const {getFilesByTag} = useTag();
+  const [avatar, setAvatar] = useState('http://placekitten.com/100');
 
   // screen orientation, show video in fullscreen when landscape
   const handleVideoRef = (component) => {
@@ -66,7 +68,7 @@ const Single = ({route}) => {
         showVideoInFullscreen();
       }
     });
-
+    // when leaving the component lock screen to portrait
     return () => {
       ScreenOrientation.removeOrientationChangeListener(orientSub);
       lock();
@@ -84,9 +86,20 @@ const Single = ({route}) => {
     // setLikes()
     // set the value of iAmLikingIt
   };
+  const getAvatar = async () => {
+    try {
+      const avatarList = await getFilesByTag('avatar_' + params.user_id);
+      if (avatarList.length > 0) {
+        setAvatar(uploadsUrl + avatarList.pop().filename);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   useEffect(() => {
     getOwnerInfo();
+    getAvatar();
     getLikes();
   }, []);
 
@@ -143,6 +156,7 @@ const Single = ({route}) => {
       <Card.Divider />
       <Text style={styles.description}>{params.description}</Text>
       <ListItem>
+        <Avatar source={{uri: avatar}} />
         <Text>{ownerInfo.username}</Text>
       </ListItem>
       <ListItem>
