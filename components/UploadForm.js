@@ -24,6 +24,7 @@ const UploadForm = ({
       <Input
         autoCapitalize="none"
         placeholder="description"
+        multiline={true}
         onChangeText={(txt) => handleInputChange('description', txt)}
         errorMessage={uploadErrors.description}
         value={inputs.description}

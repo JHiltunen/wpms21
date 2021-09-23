@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Platform,
   SafeAreaView,
-  StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
@@ -15,7 +14,6 @@ const Home = ({navigation}) => {
       <View style={styles.container}>
         <List navigation={navigation} />
       </View>
-      <StatusBar style="auto" />
     </SafeAreaView>
   );
 };
@@ -28,7 +26,6 @@ const styles = StyleSheet.create({
   droidSafeArea: {
     flex: 1,
     backgroundColor: '#ccc',
-    paddingTop: Platform.OS === 'android' ? 30 : 0,
   },
 });
 
