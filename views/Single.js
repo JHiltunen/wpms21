@@ -2,8 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet} from 'react-native';
 import {uploadsUrl} from '../utils/variables';
-import {format} from 'date-fns';
-import {Text, Button, Image, Card, ListItem} from 'react-native-elements';
+import {Text, Button, Card, ListItem} from 'react-native-elements';
 import {ActivityIndicator} from 'react-native-paper';
 import {Audio, Video} from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,8 +17,12 @@ const Single = ({route}) => {
   const videoRef = useRef(null);
 
   const getOwnerInfo = async () => {
-    const token = await AsyncStorage.getItem('userToken');
-    setOwnerInfo(await getUserInfo(params.user_id, token));
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      setOwnerInfo(await getUserInfo(params.user_id, token));
+    } catch (e) {
+      console.log('Error', e.message);
+    }
   };
   const getLikes = async () => {
     // TODO: use api hooks to get favourites
