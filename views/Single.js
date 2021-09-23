@@ -7,6 +7,7 @@ import {ActivityIndicator} from 'react-native-paper';
 import {Audio, Video} from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
+import {formatDate} from '../utils/dateFunctions';
 
 const Single = ({route}) => {
   const {params} = route;
@@ -38,7 +39,9 @@ const Single = ({route}) => {
   return (
     <Card>
       <Card.Title h4>{params.title}</Card.Title>
-      <Card.Title>{params.time_added}</Card.Title>
+      <Card.Title>
+        {formatDate(new Date(params.time_added), 'HH.mm eeee d. MMMM y')}
+      </Card.Title>
       <Card.Divider />
       {params.media_type === 'image' && (
         <Card.Image
