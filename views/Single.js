@@ -1,13 +1,20 @@
 import React, {useEffect, useRef, useState} from 'react';
+import {StyleSheet, ActivityIndicator, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
-import {StyleSheet, TouchableOpacity} from 'react-native';
 import {uploadsUrl} from '../utils/variables';
-import {Card, ListItem, Text, Button, Icon} from 'react-native-elements';
-import {ActivityIndicator} from 'react-native-paper';
-import {Audio, Video} from 'expo-av';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  Card,
+  ListItem,
+  Text,
+  Button,
+  Icon,
+  Avatar,
+} from 'react-native-elements';
+import {Video, Audio} from 'expo-av';
 import {useUser} from '../hooks/ApiHooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {formatDate} from '../utils/dateFunctions';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const Single = ({route}) => {
   const {params} = route;
@@ -15,16 +22,62 @@ const Single = ({route}) => {
   const [ownerInfo, setOwnerInfo] = useState({username: ''});
   const [likes, setLikes] = useState([]);
   const [iAmLikingIt, setIAmLikingIt] = useState(false);
-  const videoRef = useRef(null);
+  const [videoRef, setVideoRef] = useState(null);
   const [disabled, setDisabled] = useState(false);
 
-  const getOwnerInfo = async () => {
+  // screen orientation, show video in fullscreen when landscape
+  const handleVideoRef = (component) => {
+    setVideoRef(component);
+  };
+
+  const unlock = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
-      setOwnerInfo(await getUserInfo(params.user_id, token));
-    } catch (e) {
-      console.log('Error', e.message);
+      await ScreenOrientation.unlockAsync();
+    } catch (error) {
+      console.error('unlock', error.message);
     }
+  };
+
+  const lock = async () => {
+    try {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    } catch (error) {
+      console.error('lock', error.message);
+    }
+  };
+
+  const showVideoInFullscreen = async () => {
+    try {
+      if (videoRef) await videoRef.presentFullscreenPlayer();
+    } catch (error) {
+      console.error('fullscreen', error.message);
+    }
+  };
+
+  useEffect(() => {
+    unlock();
+
+    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
+      console.log('orientation', evt);
+      if (evt.orientationInfo.orientation > 2) {
+        // show video in fullscreen
+        showVideoInFullscreen();
+      }
+    });
+
+    return () => {
+      ScreenOrientation.removeOrientationChangeListener(orientSub);
+      lock();
+    };
+  }, [videoRef]);
+
+  // end screen orientation
+
+  const getOwnerInfo = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    setOwnerInfo(await getUserInfo(params.user_id, token));
   };
   const getLikes = async () => {
     // TODO: use api hooks to get favourites
@@ -66,12 +119,12 @@ const Single = ({route}) => {
         <TouchableOpacity // usePoster hides video so use this to start it
           disabled={disabled}
           onPress={() => {
-            videoRef.current.playAsync();
+            videoRef.playAsync();
             setDisabled(true); // disable touchableOpacity when video is started
           }}
         >
           <Video
-            ref={videoRef}
+            ref={handleVideoRef}
             style={styles.image}
             source={{uri: uploadsUrl + params.filename}}
             useNativeControls
