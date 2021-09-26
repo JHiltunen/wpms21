@@ -11,7 +11,7 @@ import {
   Avatar,
 } from 'react-native-elements';
 import {Video, Audio} from 'expo-av';
-import {useTag, useUser} from '../hooks/ApiHooks';
+import {useFavourites, useTag, useUser} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {formatDate} from '../utils/dateFunctions';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -19,6 +19,12 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 const Single = ({route}) => {
   const {params} = route;
   const {getUserInfo} = useUser();
+  const {
+    addFavourite,
+    deleteFavourite,
+    getFavouritesByFileId,
+    getMyFavourites,
+  } = useFavourites();
   const [ownerInfo, setOwnerInfo] = useState({username: ''});
   const [likes, setLikes] = useState([]);
   const [iAmLikingIt, setIAmLikingIt] = useState(false);
@@ -82,9 +88,16 @@ const Single = ({route}) => {
     setOwnerInfo(await getUserInfo(params.user_id, token));
   };
   const getLikes = async () => {
-    // TODO: use api hooks to get favourites
-    // setLikes()
-    // set the value of iAmLikingIt
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const likesByFileId = await getFavouritesByFileId(params.file_id);
+      setLikes(likesByFileId);
+
+      const myLikes = await getMyFavourites(token);
+      setIAmLikingIt(myLikes);
+    } catch (e) {
+      console.log('Error', e.message);
+    }
   };
   const getAvatar = async () => {
     try {
@@ -165,15 +178,17 @@ const Single = ({route}) => {
         {iAmLikingIt ? (
           <Button
             title="Like"
-            onPress={() => {
-              // use api hooks to POST a favourite
+            onPress={async () => {
+              const token = await AsyncStorage.getItem('userToken');
+              addFavourite(params.file_id, token);
             }}
           />
         ) : (
           <Button
             title="Unlike"
-            onPress={() => {
-              // use api hooks to DELETE a favourite
+            onPress={async () => {
+              const token = await AsyncStorage.getItem('userToken');
+              deleteFavourite(params.file_id, token);
             }}
           />
         )}
