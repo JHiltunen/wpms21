@@ -94,7 +94,14 @@ const Single = ({route}) => {
       setLikes(likesByFileId);
 
       const myLikes = await getMyFavourites(token);
-      setIAmLikingIt(myLikes);
+      console.log('myLikes', myLikes);
+      const currentLikes = myLikes.filter((like) => {
+        if (like.file_id === params.file_id) {
+          return like;
+        }
+      });
+      console.log('currentLikes', currentLikes);
+      setIAmLikingIt(currentLikes.length > 0 ? true : false);
     } catch (e) {
       console.log('Error', e.message);
     }
@@ -175,12 +182,17 @@ const Single = ({route}) => {
       <ListItem>
         {/* TODO: show like or dislike button depending on the current like status,
         calculate like count for a file */}
-        {iAmLikingIt ? (
+        {console.log('liking', iAmLikingIt)}
+        {!iAmLikingIt ? (
           <Button
             title="Like"
             onPress={async () => {
               const token = await AsyncStorage.getItem('userToken');
-              addFavourite(params.file_id, token);
+              const likePost = await addFavourite(params.file_id, token);
+              if (likePost) {
+                getLikes();
+              }
+              console.log('Like post:', likePost);
             }}
           />
         ) : (
@@ -188,7 +200,11 @@ const Single = ({route}) => {
             title="Unlike"
             onPress={async () => {
               const token = await AsyncStorage.getItem('userToken');
-              deleteFavourite(params.file_id, token);
+              const dontLikePost = await deleteFavourite(params.file_id, token);
+              if (dontLikePost) {
+                getLikes();
+              }
+              console.log('dont like post:', dontLikePost);
             }}
           />
         )}

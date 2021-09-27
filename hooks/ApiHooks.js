@@ -250,7 +250,7 @@ const useFavourites = () => {
     };
     try {
       const deleteFavourite = await doFetch(
-        baseUrl + 'favourites/' + fileId,
+        baseUrl + 'favourites/file/' + fileId,
         options
       );
       return deleteFavourite;
